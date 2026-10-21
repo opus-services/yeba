@@ -23,29 +23,45 @@
   <a class="evitement" href="#contenu">Aller au contenu</a>
   {% accueil as racine %}
   {% menu_principal as menu %}
+  {% with c=settings.site_yeba.Coordonnees %}
+  <div class="bandeau-haut">
+    <div class="conteneur bandeau-haut__ligne">
+      <p class="bandeau-haut__statut">Association sans but lucratif · République démocratique du Congo</p>
+      <ul class="bandeau-haut__liens">
+        {% if c.email %}<li><a href="mailto:{{ c.email }}">{{ c.email }}</a></li>{% endif %}
+        {% page_par_slug "contact" as page_contact %}
+        {% if page_contact %}<li><a href="{% pageurl page_contact %}">Contact</a></li>{% endif %}
+        {% for nom, lien in c.reseaux %}<li><a href="{{ lien }}" rel="noopener">{{ nom }}</a></li>{% endfor %}
+      </ul>
+    </div>
+  </div>
   <header class="entete">
     <div class="conteneur entete__ligne">
       <a class="marque" href="{% if racine %}{% pageurl racine %}{% else %}/{% endif %}" aria-label="Yeba, accueil">
-        <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="40" height="40">
-        <span class="marque__nom">yeba</span>
+        <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="44" height="44">
+        <span class="marque__bloc">
+          <span class="marque__nom">yeba</span>
+          <span class="marque__devise">Savoir pour agir</span>
+        </span>
       </a>
       <button class="entete__menu" type="button" aria-expanded="false" aria-controls="navigation">Menu</button>
       <nav id="navigation" class="navigation" aria-label="Menu principal">
         <ul>
           {% for rubrique in menu %}
-            <li><a href="{% pageurl rubrique %}"{% if page|dans_rubrique:rubrique %} aria-current="page"{% endif %}>{{ rubrique.title }}</a></li>
+            {% if rubrique.slug != "contact" %}<li><a href="{% pageurl rubrique %}"{% if page|dans_rubrique:rubrique %} aria-current="page"{% endif %}>{{ rubrique.title }}</a></li>{% endif %}
           {% endfor %}
         </ul>
-        {% if settings.site_yeba.Coordonnees.page_soutien %}
-          <a class="bouton bouton--appel" href="{% pageurl settings.site_yeba.Coordonnees.page_soutien %}">Nous soutenir</a>
-        {% endif %}
         <form class="navigation__recherche" action="{% url 'recherche' %}" method="get" role="search">
           <label class="invisible" for="q-entete">Rechercher</label>
           <input id="q-entete" type="search" name="q" placeholder="Rechercher" value="{{ q|default:'' }}">
         </form>
+        {% if c.page_soutien %}
+          <a class="bouton bouton--appel" href="{% pageurl c.page_soutien %}">Nous soutenir</a>
+        {% endif %}
       </nav>
     </div>
   </header>
+  {% endwith %}
 
   <main id="contenu">
     {% block contenu %}{% endblock %}
@@ -53,44 +69,56 @@
 
   {% with c=settings.site_yeba.Coordonnees %}
   <footer class="pied">
+    <div class="pied__motif" aria-hidden="true"></div>
     <div class="conteneur pied__grille">
-      <div>
+      <div class="pied__presentation">
         <div class="marque marque--pied">
-          <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="40" height="40">
-          <span class="marque__nom">yeba</span>
+          <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="44" height="44">
+          <span class="marque__bloc">
+            <span class="marque__nom">yeba</span>
+            <span class="marque__devise">Savoir pour agir</span>
+          </span>
         </div>
-        <p class="pied__devise">Savoir pour agir</p>
-        <p class="pied__mention">Association sans but lucratif de droit congolais, indépendante de tout parti politique et de toute confession.</p>
+        <p class="pied__mention">Association sans but lucratif de droit congolais, indépendante de tout parti politique et de toute confession. Elle porte la plateforme data.cd, un centre de réflexion, des campagnes citoyennes et des éditions.</p>
+        {% if c.page_soutien %}<p><a class="bouton bouton--appel" href="{% pageurl c.page_soutien %}">Nous soutenir</a></p>{% endif %}
+      </div>
+      <div>
+        <h2 class="pied__titre">L'association</h2>
+        <ul class="pied__liens">
+          {% for rubrique in menu %}<li><a href="{% pageurl rubrique %}">{{ rubrique.title }}</a></li>{% endfor %}
+          {% page_par_slug "gouvernance" as gouvernance %}
+          {% if gouvernance %}<li><a href="{% pageurl gouvernance %}">{{ gouvernance.title }}</a></li>{% endif %}
+        </ul>
       </div>
       <div>
         <h2 class="pied__titre">Nous joindre</h2>
-        {% if c.adresse %}<p>{{ c.adresse|linebreaksbr }}</p>{% endif %}
+        {% if c.adresse %}<p>{{ c.adresse|linebreaksbr }}</p>{% else %}<p>Kinshasa<br>République démocratique du Congo</p>{% endif %}
         {% if c.email %}<p><a href="mailto:{{ c.email }}">{{ c.email }}</a></p>{% endif %}
         {% if c.telephone %}<p><a href="tel:{{ c.telephone|cut:' ' }}">{{ c.telephone }}</a></p>{% endif %}
         {% if c.whatsapp %}<p><a href="https://wa.me/{{ c.whatsapp|cut:' '|cut:'+' }}">WhatsApp</a></p>{% endif %}
-        {% if not c.adresse and not c.email and not c.telephone %}<p>Kinshasa, République démocratique du Congo</p>{% endif %}
       </div>
       <div>
-        <h2 class="pied__titre">Le site</h2>
+        <h2 class="pied__titre">Nos projets</h2>
         <ul class="pied__liens">
-          {% for rubrique in menu %}<li><a href="{% pageurl rubrique %}">{{ rubrique.title }}</a></li>{% endfor %}
-          {% if c.page_soutien %}<li><a href="{% pageurl c.page_soutien %}">{{ c.page_soutien.title }}</a></li>{% endif %}
+          <li><a href="https://data.cd" rel="noopener">data.cd</a></li>
+          {% page_par_slug "yeba-reflexion" as reflexion %}{% if reflexion %}<li><a href="{% pageurl reflexion %}">{{ reflexion.title }}</a></li>{% endif %}
+          {% page_par_slug "yeba-editions" as editions %}{% if editions %}<li><a href="{% pageurl editions %}">{{ editions.title }}</a></li>{% endif %}
         </ul>
-      </div>
-      {% if c.reseaux %}
-      <div>
-        <h2 class="pied__titre">Nous suivre</h2>
+        {% if c.reseaux %}
+        <h2 class="pied__titre pied__titre--espace">Nous suivre</h2>
         <ul class="pied__liens">
           {% for nom, lien in c.reseaux %}<li><a href="{{ lien }}" rel="noopener">{{ nom }}</a></li>{% endfor %}
         </ul>
+        {% endif %}
       </div>
-      {% endif %}
     </div>
     <div class="conteneur pied__bas">
-      <span>© {% now "Y" %} Yeba ASBL</span>
-      {% page_par_slug "mentions-legales" as mentions %}
-      {% if mentions %}<a href="{% pageurl mentions %}">{{ mentions.title }}</a>{% endif %}
-      <a href="https://data.cd" rel="noopener">data.cd, un projet de Yeba</a>
+      <span>© {% now "Y" %} Yeba ASBL · Kinshasa, RDC</span>
+      <span class="pied__bas-liens">
+        {% page_par_slug "mentions-legales" as mentions %}
+        {% if mentions %}<a href="{% pageurl mentions %}">{{ mentions.title }}</a>{% endif %}
+        <a href="https://data.cd" rel="noopener">data.cd, un projet de Yeba</a>
+      </span>
     </div>
   </footer>
   {% endwith %}

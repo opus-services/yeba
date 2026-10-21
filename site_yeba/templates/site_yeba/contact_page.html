@@ -2,7 +2,8 @@
 {% load wagtailcore_tags %}
 {% block contenu %}
 {% include "site_yeba/inclus/entete_page.html" %}
-<div class="conteneur conteneur--etroit corps">
+<div class="conteneur mise-en-page mise-en-page--laterale">
+<div class="corps">
   {{ page.introduction|richtext }}
   <form class="formulaire" action="{% pageurl page %}" method="post" novalidate>
     {% csrf_token %}
@@ -21,5 +22,17 @@
     <div class="invisible" aria-hidden="true"><label for="site_internet">Ne pas remplir</label><input id="site_internet" name="site_internet" tabindex="-1" autocomplete="off"></div>
     <button class="bouton" type="submit">Envoyer</button>
   </form>
+</div>
+{% with c=settings.site_yeba.Coordonnees %}
+<aside class="laterale" aria-label="Coordonnées">
+  <h2 class="laterale__titre">Nous joindre</h2>
+  <dl class="fiche">
+    <div><dt>Siège</dt><dd>{% if c.adresse %}{{ c.adresse|linebreaksbr }}{% else %}Kinshasa, République démocratique du Congo{% endif %}</dd></div>
+    {% if c.email %}<div><dt>E-mail</dt><dd><a href="mailto:{{ c.email }}">{{ c.email }}</a></dd></div>{% endif %}
+    {% if c.telephone %}<div><dt>Téléphone</dt><dd><a href="tel:{{ c.telephone|cut:' ' }}">{{ c.telephone }}</a></dd></div>{% endif %}
+    {% if c.whatsapp %}<div><dt>WhatsApp</dt><dd><a href="https://wa.me/{{ c.whatsapp|cut:' '|cut:'+' }}">{{ c.whatsapp }}</a></dd></div>{% endif %}
+  </dl>
+</aside>
+{% endwith %}
 </div>
 {% endblock %}

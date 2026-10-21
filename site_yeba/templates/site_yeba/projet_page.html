@@ -2,22 +2,29 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 {% block contenu %}
 {% include "site_yeba/inclus/entete_page.html" with surtitre="Un projet de Yeba" %}
-<div class="conteneur conteneur--etroit corps">
-  <dl class="fiche">
-    <div><dt>Statut</dt><dd><span class="etiquette etiquette--{{ page.statut }}">{{ page.get_statut_display }}</span></dd></div>
-    {% if page.lancement %}<div><dt>Lancement</dt><dd>{{ page.lancement }}</dd></div>{% endif %}
-    {% if page.site_web %}<div><dt>Site</dt><dd><a href="{{ page.site_web }}" rel="noopener">{{ page.site_web|cut:"https://"|cut:"http://" }}</a></dd></div>{% endif %}
-  </dl>
-  {% include_block page.corps %}
-  {% if activites %}
-    <h2 class="intertitre">Activités du projet</h2>
-    {% for activite in activites %}{% include "site_yeba/inclus/activite_ligne.html" %}{% endfor %}
-  {% endif %}
-  {% if actualites %}
-    <h2 class="intertitre">Actualités du projet</h2>
-    {% for actu in actualites %}
-      <article class="breve"><p class="surtitre">{{ actu.date|date:"j F Y" }}</p><h3><a href="{% pageurl actu %}">{{ actu.title }}</a></h3></article>
-    {% endfor %}
-  {% endif %}
+<div class="conteneur mise-en-page mise-en-page--laterale">
+  <div class="corps">
+    {% include_block page.corps %}
+    {% if activites %}
+      <h2 class="intertitre">Activités du projet</h2>
+      {% for activite in activites %}{% include "site_yeba/inclus/activite_ligne.html" %}{% endfor %}
+    {% endif %}
+    {% if actualites %}
+      <h2 class="intertitre">Actualités du projet</h2>
+      {% for actu in actualites %}
+        <article class="breve"><p class="surtitre">{{ actu.date|date:"j F Y" }}</p><h3><a href="{% pageurl actu %}">{{ actu.title }}</a></h3></article>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <aside class="laterale" aria-label="Le projet en bref">
+    <h2 class="laterale__titre">En bref</h2>
+    <dl class="fiche">
+      <div><dt>Statut</dt><dd><span class="etiquette etiquette--{{ page.statut }}">{{ page.get_statut_display }}</span></dd></div>
+      {% if page.lancement %}<div><dt>Lancement</dt><dd>{{ page.lancement }}</dd></div>{% endif %}
+      {% if page.site_web %}<div><dt>Site</dt><dd><a href="{{ page.site_web }}" rel="noopener">{{ page.site_web|cut:"https://"|cut:"http://" }}</a></dd></div>{% endif %}
+      <div><dt>Porté par</dt><dd>Yeba ASBL</dd></div>
+    </dl>
+    {% if page.site_web %}<p><a class="bouton bouton--plein" href="{{ page.site_web }}" rel="noopener">Visiter le site</a></p>{% endif %}
+  </aside>
 </div>
 {% endblock %}

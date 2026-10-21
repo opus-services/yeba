@@ -2,12 +2,28 @@
 {% load wagtailcore_tags %}
 {% block contenu %}
 {% include "site_yeba/inclus/entete_page.html" %}
-<div class="conteneur conteneur--etroit corps">
-  {% include_block page.corps %}
-  {% with enfants=page.get_children.live %}
+{% with enfants=page.get_children.live parent=page.get_parent %}
+<div class="conteneur mise-en-page{% if enfants or parent.depth > 2 %} mise-en-page--laterale{% endif %}">
+  <div class="corps">
+    {% include_block page.corps %}
+  </div>
   {% if enfants %}
-    <ul class="sous-pages">{% for enfant in enfants %}<li><a href="{% pageurl enfant %}">{{ enfant.title }}</a></li>{% endfor %}</ul>
+  <aside class="laterale" aria-label="Dans cette rubrique">
+    <h2 class="laterale__titre">Dans cette rubrique</h2>
+    <ul>
+      <li><a href="{% pageurl page %}" aria-current="page">{{ page.title }}</a></li>
+      {% for enfant in enfants %}<li><a href="{% pageurl enfant %}">{{ enfant.title }}</a></li>{% endfor %}
+    </ul>
+  </aside>
+  {% elif parent.depth > 2 %}
+  <aside class="laterale" aria-label="Dans cette rubrique">
+    <h2 class="laterale__titre">Dans cette rubrique</h2>
+    <ul>
+      <li><a href="{% pageurl parent %}">{{ parent.title }}</a></li>
+      {% for soeur in parent.get_children.live %}<li><a href="{% pageurl soeur %}"{% if soeur.pk == page.pk %} aria-current="page"{% endif %}>{{ soeur.title }}</a></li>{% endfor %}
+    </ul>
+  </aside>
   {% endif %}
-  {% endwith %}
 </div>
+{% endwith %}
 {% endblock %}

@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags static %}
+{% load wagtailcore_tags wagtailimages_tags static yeba %}
 {% block classe_body %}accueil{% endblock %}
 {% block contenu %}
 <section class="hero{% if page.image %} hero--image{% endif %}">
-  {% if page.image %}{% image page.image fill-1600x800 class="hero__fond" alt="" %}{% endif %}
-  <div class="conteneur hero__grille">
-    <div class="hero__texte">
-      <p class="surtitre surtitre--clair">Yeba! Association citoyenne · RDC</p>
-      <h1>{{ page.accroche }}</h1>
-      {% if page.introduction %}<p class="hero__intro">{{ page.introduction }}</p>{% endif %}
-      {% if page.bouton_texte and page.bouton_page %}<p><a class="bouton bouton--appel" href="{% pageurl page.bouton_page %}">{{ page.bouton_texte }}</a></p>{% endif %}
-    </div>
-    <div class="hero__symbole" aria-hidden="true">
-      <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="280" height="280">
+  {% if page.image %}{% image page.image fill-1920x900 class="hero__fond" alt="" %}{% endif %}
+  <div class="hero__motif" aria-hidden="true"></div>
+  <div class="conteneur hero__contenu">
+    <p class="surtitre surtitre--clair">Yeba! Association citoyenne · RDC</p>
+    <h1>{{ page.accroche }}</h1>
+    {% if page.introduction %}<p class="hero__intro">{{ page.introduction }}</p>{% endif %}
+    <div class="hero__actions">
+      {% if page.bouton_texte and page.bouton_page %}<a class="bouton bouton--appel" href="{% pageurl page.bouton_page %}">{{ page.bouton_texte }}</a>{% endif %}
+      {% page_par_slug "projets" as liste_projets %}
+      {% if liste_projets %}<a class="bouton bouton--contour" href="{% pageurl liste_projets %}">Nos projets</a>{% endif %}
     </div>
   </div>
 </section>
@@ -20,13 +20,17 @@
 {% if page.axes %}
 <section class="section">
   <div class="conteneur">
-    <h2 class="section__titre">{{ page.axes_titre }}</h2>
+    <div class="section__intro">
+      <p class="surtitre">Notre mission</p>
+      <h2 class="section__titre">{{ page.axes_titre }}</h2>
+    </div>
     <div class="axes">
       {% for bloc in page.axes %}
         <article class="axe">
           <span class="axe__numero">{{ forloop.counter|stringformat:"02d" }}</span>
-          <h3>{% if bloc.value.page %}<a href="{% pageurl bloc.value.page %}">{{ bloc.value.titre }}</a>{% else %}{{ bloc.value.titre }}{% endif %}</h3>
+          <h3>{{ bloc.value.titre }}</h3>
           <p>{{ bloc.value.texte }}</p>
+          {% if bloc.value.page %}<a class="lien-fleche" href="{% pageurl bloc.value.page %}">En savoir plus <span aria-hidden="true">→</span></a>{% endif %}
         </article>
       {% endfor %}
     </div>
@@ -38,46 +42,79 @@
 <section class="section section--sable">
   <div class="conteneur">
     <div class="section__entete">
-      <h2 class="section__titre">Nos projets</h2>
-      {% with liste=projets.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Tous les projets →</a>{% endwith %}
+      <div>
+        <p class="surtitre">Nos programmes</p>
+        <h2 class="section__titre">Nos projets</h2>
+      </div>
+      {% with liste=projets.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Tous les projets <span aria-hidden="true">→</span></a>{% endwith %}
     </div>
-    <div class="grille-cartes">
-      {% for projet in projets %}{% include "site_yeba/inclus/carte.html" with element=projet surtitre=projet.get_statut_display %}{% endfor %}
+    <div class="projets">
+      {% for projet in projets %}{% include "site_yeba/inclus/carte.html" with element=projet surtitre=projet.get_statut_display phare=forloop.first %}{% endfor %}
     </div>
   </div>
 </section>
 {% endif %}
 
 <section class="section">
-  <div class="conteneur deux-colonnes">
+  <div class="conteneur actu-agenda">
     <div>
       <div class="section__entete">
-        <h2 class="section__titre">Prochaines activités</h2>
-        {% if activites %}{% with liste=activites.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Agenda →</a>{% endwith %}{% endif %}
+        <div>
+          <p class="surtitre">Ce qui se passe</p>
+          <h2 class="section__titre">Actualités</h2>
+        </div>
+        {% if actualites %}{% with liste=actualites.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Toutes les actualités <span aria-hidden="true">→</span></a>{% endwith %}{% endif %}
+      </div>
+      <div class="breves">
+        {% for actu in actualites %}
+          <article class="breve">
+            <p class="surtitre"><time datetime="{{ actu.date|date:'Y-m-d' }}">{{ actu.date|date:"j F Y" }}</time>{% if actu.projet %} · {{ actu.projet.title }}{% endif %}</p>
+            <h3><a href="{% pageurl actu %}">{{ actu.title }}</a></h3>
+            {% if actu.chapeau %}<p>{{ actu.chapeau|truncatewords:26 }}</p>{% endif %}
+          </article>
+        {% empty %}<p class="vide">Aucune actualité pour le moment.</p>{% endfor %}
+      </div>
+    </div>
+    <aside class="agenda">
+      <div class="section__entete">
+        <h2 class="section__titre">Agenda</h2>
+        {% if activites %}{% with liste=activites.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Tout l'agenda <span aria-hidden="true">→</span></a>{% endwith %}{% endif %}
       </div>
       {% for activite in activites %}{% include "site_yeba/inclus/activite_ligne.html" %}
       {% empty %}<p class="vide">Le programme des prochaines conférences, ateliers et campagnes sera annoncé ici.</p>{% endfor %}
+    </aside>
+  </div>
+</section>
+
+<section class="section section--fleuve engagements">
+  <div class="conteneur">
+    <div class="section__intro">
+      <p class="surtitre surtitre--clair">Nos engagements</p>
+      <h2 class="section__titre">Une association indépendante et redevable</h2>
     </div>
-    <div>
-      <div class="section__entete">
-        <h2 class="section__titre">Actualités</h2>
-        {% if actualites %}{% with liste=actualites.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Toutes →</a>{% endwith %}{% endif %}
+    <div class="engagements__grille">
+      <div class="engagement">
+        <h3>Indépendance</h3>
+        <p>Yeba ne dépend d'aucun parti politique ni d'aucune confession. Ses contenus s'appuient sur des sources vérifiées et citées.</p>
       </div>
-      {% for actu in actualites %}
-        <article class="breve">
-          <p class="surtitre"><time datetime="{{ actu.date|date:'Y-m-d' }}">{{ actu.date|date:"j F Y" }}</time></p>
-          <h3><a href="{% pageurl actu %}">{{ actu.title }}</a></h3>
-          {% if actu.chapeau %}<p>{{ actu.chapeau|truncatewords:26 }}</p>{% endif %}
-        </article>
-      {% empty %}<p class="vide">Aucune actualité pour le moment.</p>{% endfor %}
+      <div class="engagement">
+        <h3>Gouvernance collégiale</h3>
+        <p>Un conseil d'administration avec des administrateurs indépendants, un représentant des provinces et un représentant de la diaspora.</p>
+      </div>
+      <div class="engagement">
+        <h3>Redevabilité</h3>
+        <p>Deux commissaires aux comptes contrôlent la tenue des comptes. Les comptes annuels, le rapport d'activités et la liste des principaux financeurs sont rendus publics après leur approbation.</p>
+      </div>
     </div>
+    {% page_par_slug "gouvernance" as gouvernance %}
+    {% if gouvernance %}<p class="engagements__lien"><a class="lien-fleche" href="{% pageurl gouvernance %}">Découvrir notre gouvernance <span aria-hidden="true">→</span></a></p>{% endif %}
   </div>
 </section>
 
 {% if partenaires %}
-<section class="section section--sable">
+<section class="section section--partenaires">
   <div class="conteneur">
-    <h2 class="section__titre">Ils nous accompagnent</h2>
+    <p class="surtitre surtitre--centre">Ils nous accompagnent</p>
     <ul class="partenaires">
       {% for p in partenaires %}
         <li>{% if p.lien %}<a href="{{ p.lien }}" rel="noopener">{% endif %}{% if p.logo %}{% image p.logo max-200x80 alt=p.nom %}{% else %}{{ p.nom }}{% endif %}{% if p.lien %}</a>{% endif %}</li>
@@ -91,10 +128,11 @@
 <section class="appel">
   <div class="conteneur appel__grille">
     <div>
+      <p class="surtitre surtitre--clair">Agir avec nous</p>
       <h2>{{ page.appel_titre }}</h2>
       {% if page.appel_texte %}<p>{{ page.appel_texte }}</p>{% endif %}
     </div>
-    {% if page.appel_page %}<a class="bouton bouton--appel" href="{% pageurl page.appel_page %}">{{ page.appel_page.title }}</a>{% endif %}
+    {% if page.appel_page %}<a class="bouton bouton--appel bouton--grand" href="{% pageurl page.appel_page %}">{{ page.appel_page.title }}</a>{% endif %}
   </div>
 </section>
 {% endif %}
