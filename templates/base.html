@@ -1,0 +1,111 @@
+{% load static wagtailcore_tags wagtailimages_tags yeba %}<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block titre_page %}<title>{% if page.seo_title %}{{ page.seo_title }}{% elif page and page.depth > 2 %}{{ page.title }} · Yeba{% else %}Yeba · Savoir pour agir{% endif %}</title>{% endblock %}
+  <meta property="og:site_name" content="Yeba">
+  {% if page %}
+  {% description page as description %}
+  {% if description %}<meta name="description" content="{{ description|striptags|truncatewords:40 }}">
+  <meta property="og:description" content="{{ description|striptags|truncatewords:40 }}">{% endif %}
+  <meta property="og:title" content="{% firstof page.seo_title page.title %}">
+  {% if page.image %}{% image page.image fill-1200x630 as partage %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ partage.url }}">{% endif %}
+  <link rel="canonical" href="{{ page.full_url }}">
+  {% endif %}
+  <link rel="icon" href="{% static 'yeba/img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600&family=Figtree:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{% static 'yeba/css/yeba.css' %}">
+</head>
+<body class="{% block classe_body %}{% endblock %}">
+  <a class="evitement" href="#contenu">Aller au contenu</a>
+  {% accueil as racine %}
+  {% menu_principal as menu %}
+  <header class="entete">
+    <div class="conteneur entete__ligne">
+      <a class="marque" href="{% if racine %}{% pageurl racine %}{% else %}/{% endif %}" aria-label="Yeba, accueil">
+        <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="40" height="40">
+        <span class="marque__nom">yeba</span>
+      </a>
+      <button class="entete__menu" type="button" aria-expanded="false" aria-controls="navigation">Menu</button>
+      <nav id="navigation" class="navigation" aria-label="Menu principal">
+        <ul>
+          {% for rubrique in menu %}
+            <li><a href="{% pageurl rubrique %}"{% if page|dans_rubrique:rubrique %} aria-current="page"{% endif %}>{{ rubrique.title }}</a></li>
+          {% endfor %}
+        </ul>
+        {% if settings.site_yeba.Coordonnees.page_soutien %}
+          <a class="bouton bouton--appel" href="{% pageurl settings.site_yeba.Coordonnees.page_soutien %}">Nous soutenir</a>
+        {% endif %}
+        <form class="navigation__recherche" action="{% url 'recherche' %}" method="get" role="search">
+          <label class="invisible" for="q-entete">Rechercher</label>
+          <input id="q-entete" type="search" name="q" placeholder="Rechercher" value="{{ q|default:'' }}">
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu">
+    {% block contenu %}{% endblock %}
+  </main>
+
+  {% with c=settings.site_yeba.Coordonnees %}
+  <footer class="pied">
+    <div class="conteneur pied__grille">
+      <div>
+        <div class="marque marque--pied">
+          <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="40" height="40">
+          <span class="marque__nom">yeba</span>
+        </div>
+        <p class="pied__devise">Savoir pour agir</p>
+        <p class="pied__mention">Association sans but lucratif de droit congolais, indépendante de tout parti politique et de toute confession.</p>
+      </div>
+      <div>
+        <h2 class="pied__titre">Nous joindre</h2>
+        {% if c.adresse %}<p>{{ c.adresse|linebreaksbr }}</p>{% endif %}
+        {% if c.email %}<p><a href="mailto:{{ c.email }}">{{ c.email }}</a></p>{% endif %}
+        {% if c.telephone %}<p><a href="tel:{{ c.telephone|cut:' ' }}">{{ c.telephone }}</a></p>{% endif %}
+        {% if c.whatsapp %}<p><a href="https://wa.me/{{ c.whatsapp|cut:' '|cut:'+' }}">WhatsApp</a></p>{% endif %}
+        {% if not c.adresse and not c.email and not c.telephone %}<p>Kinshasa, République démocratique du Congo</p>{% endif %}
+      </div>
+      <div>
+        <h2 class="pied__titre">Le site</h2>
+        <ul class="pied__liens">
+          {% for rubrique in menu %}<li><a href="{% pageurl rubrique %}">{{ rubrique.title }}</a></li>{% endfor %}
+          {% if c.page_soutien %}<li><a href="{% pageurl c.page_soutien %}">{{ c.page_soutien.title }}</a></li>{% endif %}
+        </ul>
+      </div>
+      {% if c.reseaux %}
+      <div>
+        <h2 class="pied__titre">Nous suivre</h2>
+        <ul class="pied__liens">
+          {% for nom, lien in c.reseaux %}<li><a href="{{ lien }}" rel="noopener">{{ nom }}</a></li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+    <div class="conteneur pied__bas">
+      <span>© {% now "Y" %} Yeba ASBL</span>
+      {% page_par_slug "mentions-legales" as mentions %}
+      {% if mentions %}<a href="{% pageurl mentions %}">{{ mentions.title }}</a>{% endif %}
+      <a href="https://data.cd" rel="noopener">data.cd, un projet de Yeba</a>
+    </div>
+  </footer>
+  {% endwith %}
+
+  <script>
+    (function () {
+      var bouton = document.querySelector(".entete__menu");
+      var nav = document.getElementById("navigation");
+      if (!bouton || !nav) return;
+      bouton.addEventListener("click", function () {
+        var ouvert = bouton.getAttribute("aria-expanded") === "true";
+        bouton.setAttribute("aria-expanded", String(!ouvert));
+        nav.classList.toggle("navigation--ouverte", !ouvert);
+      });
+    })();
+  </script>
+</body>
+</html>

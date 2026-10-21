@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block contenu %}
+{% with d=page.date|date:"j F Y" %}
+{% include "site_yeba/inclus/entete_page.html" with surtitre=d %}
+{% endwith %}
+<div class="conteneur conteneur--etroit corps">
+  {% include_block page.corps %}
+  {% if page.auteur or page.projet %}
+  <p class="signature">{% if page.auteur %}Par {{ page.auteur }}{% endif %}{% if page.auteur and page.projet %} · {% endif %}{% if page.projet %}Projet : <a href="{% pageurl page.projet %}">{{ page.projet.title }}</a>{% endif %}</p>
+  {% endif %}
+</div>
+{% endblock %}

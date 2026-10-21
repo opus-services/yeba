@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block titre_page %}<title>Recherche · Yeba</title><meta name="robots" content="noindex">{% endblock %}
+{% block contenu %}
+<header class="bandeau-page"><div class="conteneur conteneur--etroit"><h1>Recherche</h1></div></header>
+<div class="conteneur conteneur--etroit corps">
+  <form class="recherche" action="{% url 'recherche' %}" method="get" role="search">
+    <label class="invisible" for="q">Rechercher sur le site</label>
+    <input id="q" type="search" name="q" value="{{ q }}" placeholder="Un projet, une activité, un sujet…">
+    <button class="bouton" type="submit">Rechercher</button>
+  </form>
+  {% if q %}
+    {% for resultat in resultats %}
+      <article class="breve">
+        <h3><a href="{% pageurl resultat %}">{{ resultat.title }}</a></h3>
+        {% with r=resultat.specific %}{% if r.chapeau %}<p>{{ r.chapeau|truncatewords:30 }}</p>{% endif %}{% endwith %}
+      </article>
+    {% empty %}<p class="vide">Aucun résultat pour « {{ q }} ».</p>{% endfor %}
+    {% include "site_yeba/inclus/pagination.html" with liste=resultats %}
+  {% endif %}
+</div>
+{% endblock %}

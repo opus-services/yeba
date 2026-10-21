@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block contenu %}
+{% include "site_yeba/inclus/entete_page.html" %}
+<div class="conteneur section">
+  <div class="grille-cartes">
+    {% for actu in actualites %}{% include "site_yeba/inclus/carte.html" with element=actu surtitre=actu.date|date:"j F Y" %}
+    {% empty %}<p class="vide">Aucune actualité pour le moment.</p>{% endfor %}
+  </div>
+  {% include "site_yeba/inclus/pagination.html" with liste=actualites %}
+</div>
+{% endblock %}

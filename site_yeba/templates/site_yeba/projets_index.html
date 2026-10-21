@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block contenu %}
+{% include "site_yeba/inclus/entete_page.html" %}
+<div class="conteneur section">
+  <div class="grille-cartes">
+    {% for projet in projets %}{% include "site_yeba/inclus/carte.html" with element=projet surtitre=projet.get_statut_display %}
+    {% empty %}<p class="vide">Aucun projet publié pour le moment.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

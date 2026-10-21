@@ -1,0 +1,7 @@
+{% spaceless %}
+{% if activite.fin and activite.fin|date:"Ymd" != activite.debut|date:"Ymd" %}
+Du {{ activite.debut|date:"j F Y" }} au {{ activite.fin|date:"j F Y" }}
+{% else %}
+Le {{ activite.debut|date:"l j F Y" }}, {% if activite.fin %}de {{ activite.debut|time:"H\hi" }} à {{ activite.fin|time:"H\hi" }}{% else %}à {{ activite.debut|time:"H\hi" }}{% endif %}
+{% endif %}
+{% endspaceless %}

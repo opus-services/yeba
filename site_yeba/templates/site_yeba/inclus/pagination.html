@@ -1,0 +1,7 @@
+{% if liste.has_other_pages %}
+<nav class="pagination" aria-label="Pages">
+  {% if liste.has_previous %}<a href="?{% if extra %}{{ extra }}&amp;{% endif %}page={{ liste.previous_page_number }}">← Précédent</a>{% endif %}
+  <span>Page {{ liste.number }} sur {{ liste.paginator.num_pages }}</span>
+  {% if liste.has_next %}<a href="?{% if extra %}{{ extra }}&amp;{% endif %}page={{ liste.next_page_number }}">Suivant →</a>{% endif %}
+</nav>
+{% endif %}

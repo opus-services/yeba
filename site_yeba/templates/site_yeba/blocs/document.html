@@ -1,0 +1,6 @@
+<p class="bloc-document">
+  <a href="{{ value.document.url }}">
+    <span class="bloc-document__titre">{{ value.titre|default:value.document.title }}</span>
+    <span class="bloc-document__meta">{{ value.document.file_extension|upper }} · {{ value.document.file_size|filesizeformat }}</span>
+  </a>
+</p>

@@ -1,0 +1,6 @@
+<section class="chiffres">
+  {% if value.titre %}<h2>{{ value.titre }}</h2>{% endif %}
+  <dl class="chiffres__grille">
+    {% for c in value.chiffres %}<div><dt>{{ c.libelle }}</dt><dd>{{ c.valeur }}</dd></div>{% endfor %}
+  </dl>
+</section>

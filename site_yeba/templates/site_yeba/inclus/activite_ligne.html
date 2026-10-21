@@ -1,0 +1,13 @@
+{% load wagtailcore_tags %}
+<article class="activite{% if activite.passee %} activite--passee{% endif %}">
+  <div class="activite__date" aria-hidden="true">
+    <span class="activite__jour">{{ activite.debut|date:"j" }}</span>
+    <span class="activite__mois">{{ activite.debut|date:"M Y" }}</span>
+  </div>
+  <div class="activite__texte">
+    <p class="surtitre">{{ activite.get_genre_display }}{% if activite.ville %} · {{ activite.ville }}{% endif %}{% if activite.en_ligne %} · en ligne{% endif %}</p>
+    <h3 class="activite__titre"><a href="{% pageurl activite %}">{{ activite.title }}</a></h3>
+    <p class="activite__quand">{% include "site_yeba/inclus/dates.html" %}</p>
+    {% if activite.chapeau %}<p>{{ activite.chapeau|truncatewords:28 }}</p>{% endif %}
+  </div>
+</article>

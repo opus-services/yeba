@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block contenu %}
+{% include "site_yeba/inclus/entete_page.html" with surtitre=page.get_genre_display %}
+<div class="conteneur conteneur--etroit corps">
+  {% with activite=page %}
+  <dl class="fiche">
+    <div><dt>Quand</dt><dd>{% include "site_yeba/inclus/dates.html" %}</dd></div>
+    {% if page.lieu or page.ville %}<div><dt>Où</dt><dd>{{ page.lieu }}{% if page.lieu and page.ville %}, {% endif %}{{ page.ville }}{% if page.en_ligne %} · aussi en ligne{% endif %}</dd></div>{% elif page.en_ligne %}<div><dt>Où</dt><dd>En ligne</dd></div>{% endif %}
+    {% if page.projet %}<div><dt>Projet</dt><dd><a href="{% pageurl page.projet %}">{{ page.projet.title }}</a></dd></div>{% endif %}
+  </dl>
+  {% if page.inscription and not page.passee %}<p><a class="bouton bouton--appel" href="{{ page.inscription }}" rel="noopener">S'inscrire</a></p>{% endif %}
+  {% if page.passee %}<p class="note">Cette activité a eu lieu.</p>{% endif %}
+  {% endwith %}
+  {% include_block page.corps %}
+</div>
+{% endblock %}

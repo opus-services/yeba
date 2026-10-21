@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block contenu %}
+{% include "site_yeba/inclus/entete_page.html" %}
+<div class="conteneur conteneur--etroit corps">
+  {% if page.remerciement %}{{ page.remerciement|richtext }}{% else %}<p>Merci, votre message a bien été envoyé.</p>{% endif %}
+</div>
+{% endblock %}

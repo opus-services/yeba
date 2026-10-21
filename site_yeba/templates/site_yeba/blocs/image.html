@@ -1,0 +1,5 @@
+{% load wagtailimages_tags %}
+<figure class="bloc-image">
+  {% image value.image width-1200 loading="lazy" %}
+  {% if value.legende or value.credit %}<figcaption>{{ value.legende }}{% if value.credit %} <span class="credit">© {{ value.credit }}</span>{% endif %}</figcaption>{% endif %}
+</figure>

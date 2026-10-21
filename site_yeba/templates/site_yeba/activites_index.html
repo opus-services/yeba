@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block contenu %}
+{% include "site_yeba/inclus/entete_page.html" %}
+<div class="conteneur conteneur--etroit section">
+  <nav class="filtres" aria-label="Type d'activité">
+    <a href="?"{% if not genre_choisi %} aria-current="true"{% endif %}>Toutes</a>
+    {% for code, nom in genres %}<a href="?type={{ code }}"{% if genre_choisi == code %} aria-current="true"{% endif %}>{{ nom }}</a>{% endfor %}
+  </nav>
+  <h2 class="section__titre">À venir</h2>
+  {% for activite in a_venir %}{% include "site_yeba/inclus/activite_ligne.html" %}
+  {% empty %}<p class="vide">Aucune activité annoncée pour le moment.</p>{% endfor %}
+  {% if passees %}
+    <h2 class="section__titre section__titre--espace">Activités passées</h2>
+    {% for activite in passees %}{% include "site_yeba/inclus/activite_ligne.html" %}{% endfor %}
+    {% if genre_choisi %}{% include "site_yeba/inclus/pagination.html" with liste=passees extra="type="|add:genre_choisi %}{% else %}{% include "site_yeba/inclus/pagination.html" with liste=passees %}{% endif %}
+  {% endif %}
+</div>
+{% endblock %}

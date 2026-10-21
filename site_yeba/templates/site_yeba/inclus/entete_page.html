@@ -1,0 +1,12 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<header class="bandeau-page">
+  <div class="conteneur conteneur--etroit">
+    {% if page.get_parent.depth > 2 %}<p class="fil"><a href="{% pageurl page.get_parent %}">← {{ page.get_parent.title }}</a></p>{% endif %}
+    {% if surtitre %}<p class="surtitre surtitre--clair">{{ surtitre }}</p>{% endif %}
+    <h1>{{ page.title }}</h1>
+    {% if page.chapeau %}<p class="chapeau">{{ page.chapeau }}</p>{% endif %}
+  </div>
+</header>
+{% if page.image %}
+<figure class="conteneur conteneur--etroit image-principale">{% image page.image width-1200 %}</figure>
+{% endif %}

@@ -1,0 +1,2 @@
+{% load wagtailcore_tags %}
+<p class="bloc-bouton"><a class="bouton" href="{% if value.page %}{% pageurl value.page %}{% else %}{{ value.lien }}{% endif %}">{{ value.texte }}</a></p>

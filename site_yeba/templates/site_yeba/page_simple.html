@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block contenu %}
+{% include "site_yeba/inclus/entete_page.html" %}
+<div class="conteneur conteneur--etroit corps">
+  {% include_block page.corps %}
+  {% with enfants=page.get_children.live %}
+  {% if enfants %}
+    <ul class="sous-pages">{% for enfant in enfants %}<li><a href="{% pageurl enfant %}">{{ enfant.title }}</a></li>{% endfor %}</ul>
+  {% endif %}
+  {% endwith %}
+</div>
+{% endblock %}

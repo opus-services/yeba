@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+{% block classe_body %}accueil{% endblock %}
+{% block contenu %}
+<section class="hero{% if page.image %} hero--image{% endif %}">
+  {% if page.image %}{% image page.image fill-1600x800 class="hero__fond" alt="" %}{% endif %}
+  <div class="conteneur hero__grille">
+    <div class="hero__texte">
+      <p class="surtitre surtitre--clair">Yeba! Association citoyenne · RDC</p>
+      <h1>{{ page.accroche }}</h1>
+      {% if page.introduction %}<p class="hero__intro">{{ page.introduction }}</p>{% endif %}
+      {% if page.bouton_texte and page.bouton_page %}<p><a class="bouton bouton--appel" href="{% pageurl page.bouton_page %}">{{ page.bouton_texte }}</a></p>{% endif %}
+    </div>
+    <div class="hero__symbole" aria-hidden="true">
+      <img src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="280" height="280">
+    </div>
+  </div>
+</section>
+
+{% if page.axes %}
+<section class="section">
+  <div class="conteneur">
+    <h2 class="section__titre">{{ page.axes_titre }}</h2>
+    <div class="axes">
+      {% for bloc in page.axes %}
+        <article class="axe">
+          <span class="axe__numero">{{ forloop.counter|stringformat:"02d" }}</span>
+          <h3>{% if bloc.value.page %}<a href="{% pageurl bloc.value.page %}">{{ bloc.value.titre }}</a>{% else %}{{ bloc.value.titre }}{% endif %}</h3>
+          <p>{{ bloc.value.texte }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if projets %}
+<section class="section section--sable">
+  <div class="conteneur">
+    <div class="section__entete">
+      <h2 class="section__titre">Nos projets</h2>
+      {% with liste=projets.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Tous les projets →</a>{% endwith %}
+    </div>
+    <div class="grille-cartes">
+      {% for projet in projets %}{% include "site_yeba/inclus/carte.html" with element=projet surtitre=projet.get_statut_display %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="conteneur deux-colonnes">
+    <div>
+      <div class="section__entete">
+        <h2 class="section__titre">Prochaines activités</h2>
+        {% if activites %}{% with liste=activites.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Agenda →</a>{% endwith %}{% endif %}
+      </div>
+      {% for activite in activites %}{% include "site_yeba/inclus/activite_ligne.html" %}
+      {% empty %}<p class="vide">Le programme des prochaines conférences, ateliers et campagnes sera annoncé ici.</p>{% endfor %}
+    </div>
+    <div>
+      <div class="section__entete">
+        <h2 class="section__titre">Actualités</h2>
+        {% if actualites %}{% with liste=actualites.0.get_parent %}<a class="lien-fleche" href="{% pageurl liste %}">Toutes →</a>{% endwith %}{% endif %}
+      </div>
+      {% for actu in actualites %}
+        <article class="breve">
+          <p class="surtitre"><time datetime="{{ actu.date|date:'Y-m-d' }}">{{ actu.date|date:"j F Y" }}</time></p>
+          <h3><a href="{% pageurl actu %}">{{ actu.title }}</a></h3>
+          {% if actu.chapeau %}<p>{{ actu.chapeau|truncatewords:26 }}</p>{% endif %}
+        </article>
+      {% empty %}<p class="vide">Aucune actualité pour le moment.</p>{% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if partenaires %}
+<section class="section section--sable">
+  <div class="conteneur">
+    <h2 class="section__titre">Ils nous accompagnent</h2>
+    <ul class="partenaires">
+      {% for p in partenaires %}
+        <li>{% if p.lien %}<a href="{{ p.lien }}" rel="noopener">{% endif %}{% if p.logo %}{% image p.logo max-200x80 alt=p.nom %}{% else %}{{ p.nom }}{% endif %}{% if p.lien %}</a>{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{% if page.appel_titre %}
+<section class="appel">
+  <div class="conteneur appel__grille">
+    <div>
+      <h2>{{ page.appel_titre }}</h2>
+      {% if page.appel_texte %}<p>{{ page.appel_texte }}</p>{% endif %}
+    </div>
+    {% if page.appel_page %}<a class="bouton bouton--appel" href="{% pageurl page.appel_page %}">{{ page.appel_page.title }}</a>{% endif %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block contenu %}
+{% include "site_yeba/inclus/entete_page.html" %}
+<div class="conteneur conteneur--etroit corps">
+  {{ page.introduction|richtext }}
+  <form class="formulaire" action="{% pageurl page %}" method="post" novalidate>
+    {% csrf_token %}
+    {% for champ in form %}
+      <div class="formulaire__champ{% if champ.errors %} formulaire__champ--erreur{% endif %}">
+        {% if champ.widget_type == 'checkbox' %}
+          <label>{{ champ }} {{ champ.label }}</label>
+        {% else %}
+          <label for="{{ champ.id_for_label }}">{{ champ.label }}{% if champ.field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
+          {{ champ }}
+        {% endif %}
+        {% if champ.help_text %}<small>{{ champ.help_text }}</small>{% endif %}
+        {% for erreur in champ.errors %}<p class="formulaire__erreur">{{ erreur }}</p>{% endfor %}
+      </div>
+    {% endfor %}
+    <div class="invisible" aria-hidden="true"><label for="site_internet">Ne pas remplir</label><input id="site_internet" name="site_internet" tabindex="-1" autocomplete="off"></div>
+    <button class="bouton" type="submit">Envoyer</button>
+  </form>
+</div>
+{% endblock %}
