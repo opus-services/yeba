@@ -105,8 +105,8 @@ class Command(BaseCommand):
                                       "et le rapport d'activités et fixe les grandes orientations.</p>"),
                        ("intertitre", "Le Conseil d'administration"),
                        ("paragraphe", "<p>Cinq à sept administrateurs bénévoles, élus pour trois ans, dont au moins "
-                                      "deux administrateurs indépendants, un administrateur résidant en province et un "
-                                      "administrateur issu de la diaspora.</p>"),
+                                      "deux administrateurs indépendants, un administrateur résidant dans une province autre que "
+                                      "Kinshasa et un administrateur issu de la diaspora.</p>"),
                        ("intertitre", "La Direction exécutive"),
                        ("paragraphe", "<p>Le Directeur exécutif met en œuvre les décisions du Conseil et dirige "
                                       "l'équipe, les projets et le réseau de collaborateurs.</p>"),
@@ -134,6 +134,9 @@ class Command(BaseCommand):
                                 ("paragraphe", "<p>Chaque fiche cite ses sources et indique la date de sa dernière "
                                                "vérification. Les citoyens peuvent signaler une erreur ou une "
                                                "information dépassée.</p>"),
+                                ("paragraphe", "<p>L'information de base publiée sur data.cd reste gratuite. Les "
+                                               "services avancés pour les entreprises (Yeba Pro) seront proposés "
+                                               "plus tard par une société liée, sous licence de l'association.</p>"),
                                 ("bouton", {"texte": "Visiter data.cd", "page": None, "lien": "https://data.cd"}),
                             ))
         reflexion = self.creer(projets, ProjetPage, "yeba-reflexion", title="Yeba Réflexion", statut="en_preparation",
