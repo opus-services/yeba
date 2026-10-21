@@ -1,15 +1,16 @@
 {% load wagtailcore_tags wagtailimages_tags static %}
-<article class="carte">
+<article class="carte{% if phare %} carte--phare{% endif %}">
   <a class="carte__lien" href="{% pageurl element %}">
     <div class="carte__visuel">
-      {% if element.image %}{% image element.image fill-640x400 loading="lazy" %}
+      {% if element.image %}{% image element.image fill-960x600 loading="lazy" %}
       {% elif element.logo %}{% image element.logo max-320x200 class="carte__logo" loading="lazy" %}
-      {% else %}<img class="carte__symbole" src="{% static 'yeba/img/symbole-b.svg' %}" alt="" width="56" height="56">{% endif %}
+      {% else %}<span class="carte__motif" aria-hidden="true"></span><span class="carte__nom" aria-hidden="true">{{ element.title }}</span>{% endif %}
     </div>
     <div class="carte__texte">
       {% if surtitre %}<p class="surtitre">{{ surtitre }}</p>{% endif %}
       <h3 class="carte__titre">{{ element.title }}</h3>
       {% if element.chapeau %}<p class="carte__chapeau">{{ element.chapeau|truncatewords:30 }}</p>{% endif %}
+      <span class="carte__plus">Découvrir <span aria-hidden="true">→</span></span>
     </div>
   </a>
 </article>
