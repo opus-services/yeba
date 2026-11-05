@@ -124,20 +124,46 @@ class Command(BaseCommand):
                              chapeau="Chaque projet porte son propre nom et sert la même mission : savoir pour agir.")
         datacd = self.creer(projets, ProjetPage, "data-cd", title="data.cd", statut="en_cours",
                             site_web="https://data.cd", lancement="2026",
-                            chapeau="La plateforme qui explique la RDC : démarches administratives, institutions, "
-                                    "histoire, patrimoine, chiffres clés et simulateurs, avec des sources citées.",
+                            chapeau="La plateforme qui explique la RDC en six langues : démarches, institutions, "
+                                    "provinces, histoire, patrimoine, chiffres clés, simulateurs et signalements "
+                                    "citoyens, avec des sources citées.",
                             corps=corps(
                                 ("paragraphe", "<p>data.cd rassemble en un seul endroit ce qu'il faut savoir pour "
                                                "vivre, travailler et entreprendre en RDC : comment obtenir un "
                                                "passeport ou un acte de naissance, qui fait quoi dans les "
                                                "institutions, combien coûte une démarche, ce que dit la loi.</p>"),
+                                ("intertitre", "Ce que propose le site"),
+                                ("paragraphe", "<p>Guides de démarches et fiches « L'essentiel » ; les 26 provinces et "
+                                               "leurs chefs-lieux ; les institutions nationales, provinciales et "
+                                               "locales avec leurs dirigeants ; l'histoire, le patrimoine et les "
+                                               "personnalités ; les droits et devoirs ; les entreprises publiques et "
+                                               "privées ; les indicateurs clés ; un agenda des événements ; des "
+                                               "simulateurs d'impôts et de cotisations.</p>"),
+                                ("intertitre", "Six langues, sur tous les téléphones"),
+                                ("paragraphe", "<p>Le site parle français, kikongo, swahili, lingala, tshiluba et "
+                                               "anglais. Les traductions sont relues par des traducteurs de chaque "
+                                               "langue. Sur téléphone, une version légère s'installe comme une "
+                                               "application, se lit hors connexion et se partage en un geste sur "
+                                               "WhatsApp.</p>"),
+                                ("intertitre", "Une méthode vérifiable"),
                                 ("paragraphe", "<p>Chaque fiche cite ses sources et indique la date de sa dernière "
-                                               "vérification. Les citoyens peuvent signaler une erreur ou une "
-                                               "information dépassée.</p>"),
-                                ("paragraphe", "<p>L'information de base publiée sur data.cd reste gratuite. Les "
-                                               "services avancés pour les entreprises (Yeba Pro) seront proposés "
-                                               "plus tard par une société liée, sous licence de l'association.</p>"),
+                                               "vérification. Les points incertains sont signalés « À vérifier » et "
+                                               "les contributions des lecteurs sont relues avant publication.</p>"),
+                                ("intertitre", "Les citoyens participent"),
+                                ("paragraphe", "<p>Chacun peut signaler un problème, en RDC ou à l'étranger (santé, "
+                                               "transport, état civil, ambassade…), avec photos et emplacement. La "
+                                               "rédaction le vérifie, le transmet et publie des pistes de solution. "
+                                               "Le site accueille aussi un forum modéré, des réflexions proposées "
+                                               "par les lecteurs et une lettre d'information.</p>"),
+                                ("intertitre", "Gratuit pour tous, des partenariats transparents"),
+                                ("paragraphe", "<p>L'information de base publiée sur data.cd reste gratuite et sans "
+                                               "publicité. Les entreprises et institutions peuvent devenir "
+                                               "partenaires d'une fiche qui les concerne : le partenariat est "
+                                               "affiché comme tel, ne change ni les faits ni les sources, et est "
+                                               "conclu directement avec l'association Yeba.</p>"),
                                 ("bouton", {"texte": "Visiter data.cd", "page": None, "lien": "https://data.cd"}),
+                                ("bouton", {"texte": "Découvrir le projet", "page": None,
+                                            "lien": "https://data.cd/a-propos"}),
                             ))
         reflexion = self.creer(projets, ProjetPage, "yeba-reflexion", title="Yeba Réflexion", statut="en_preparation",
                                chapeau="Le centre de réflexion de Yeba : conférences, séminaires, tables rondes et "
