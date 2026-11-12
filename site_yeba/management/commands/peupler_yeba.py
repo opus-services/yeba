@@ -142,17 +142,27 @@ class Command(BaseCommand):
                                 ("intertitre", "Six langues, sur tous les téléphones"),
                                 ("paragraphe", "<p>Le site parle français, kikongo, swahili, lingala, tshiluba et "
                                                "anglais. Les traductions sont relues par des traducteurs de chaque "
-                                               "langue. Sur téléphone, une version légère s'installe comme une "
-                                               "application, se lit hors connexion et se partage en un geste sur "
-                                               "WhatsApp.</p>"),
+                                               "langue, et les démarches comme les droits et devoirs peuvent être "
+                                               "écoutés à voix haute.</p>"),
+                                ("paragraphe", "<p>L'application DATA CD pour Android, en cours de publication sur "
+                                               "Google Play, reprend tout le site dans une "
+                                               "interface pensée pour le téléphone : recherche, signalement en un "
+                                               "geste, services « Près de moi » (hôpitaux, écoles, itinéraire), "
+                                               "suivi de ses signalements et lecture sans internet des démarches, "
+                                               "des droits et devoirs et de la Constitution. La version pour iPhone "
+                                               "suivra.</p>"),
                                 ("intertitre", "Une méthode vérifiable"),
                                 ("paragraphe", "<p>Chaque fiche cite ses sources et indique la date de sa dernière "
                                                "vérification. Les points incertains sont signalés « À vérifier » et "
                                                "les contributions des lecteurs sont relues avant publication.</p>"),
                                 ("intertitre", "Les citoyens participent"),
                                 ("paragraphe", "<p>Chacun peut signaler un problème, en RDC ou à l'étranger (santé, "
-                                               "transport, état civil, ambassade…), avec photos et emplacement. La "
-                                               "rédaction le vérifie, le transmet et publie des pistes de solution. "
+                                               "transport, état civil, ambassade…), avec photos et emplacement, même "
+                                               "sans compte. La rédaction le vérifie et le transmet au service "
+                                               "compétent, sans l'identité de son auteur. La réponse du service est "
+                                               "publiée après relecture, et l'auteur confirme si le problème est "
+                                               "vraiment réglé. Une page publique montre les problèmes qui "
+                                               "reviennent et la façon dont les services répondent. "
                                                "Le site accueille aussi un forum modéré, des réflexions proposées "
                                                "par les lecteurs et une lettre d'information.</p>"),
                                 ("intertitre", "Gratuit pour tous, des partenariats transparents"),
